@@ -30,6 +30,8 @@ facturaCtrl.add)
 
 route.delete("/:id",verifyToken,facturaCtrl.delete)
 
+route.put("/:id",verifyToken,facturaCtrl.update)
+
 
 
 export default route;

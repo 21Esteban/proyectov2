@@ -6,7 +6,7 @@ const facturaCtrl = {}
 
 facturaCtrl.listar = async (req,res) => {
     try {
-        const facturas = await facturaModel.find().populate("product").populate("user").sort({createAt:-1})
+        const facturas = await facturaModel.find().populate("product").populate("user",{password:0}).sort({createAt:-1})
 
         response(res,200,true,facturas,"Lista de facturas")
         
@@ -53,7 +53,7 @@ facturaCtrl.listar = async (req,res) => {
 
         console.log(stock);
 
-        //arreglar esto que no me hace la cuenta me da errror
+        //ya arregle esto
 
         const total = price*quantity
 
@@ -132,38 +132,26 @@ facturaCtrl.listar = async (req,res) => {
 
 
 
-facturaCtrl.update = async (req,res)=>{
+facturaCtrl.update = async (req,res) => {
     try {
 
-        const {id}  =req.params
-        
-        const facturaAactualizar = await facturaModel.findById(id)
+        const {id} = req.params;
 
-        // RESTAR EL STOCK O SUMAR EL STOCK DEL PRODUCTO SI LA FACTURA ES 
-        // EDITADA.
-
-        
-        
-        
-
-        if (!facturaAactualizar){
-           return response(res,404,false,null,"La factura no encontrada")
-        }
-
-        await facturaAactualizar.updateOne(req.body)
+        const factura = await facturaModel.findById(id)
 
 
-        if(req.body.quantity){
+        if(!factura){
+            return response(res,404,false,"","factura no encontrada")}
 
 
-        }
+        await factura.updateOne(req.body);
 
+        response(res,200,true,"","factura actualizada ")
 
     } catch (error) {
         response(res,500,false,"",error.message)
     }
 }
-
 
 
 
